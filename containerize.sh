@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "VASA FACIT. MUNDI MUTAT"
+echo " "
 set -euo pipefail
 
 if [[ $# -lt 1 ]]; then
@@ -87,6 +89,6 @@ if [[ "$BUILD_FLAG" == "--build" ]]; then
 else
     echo "Loading $INSTALL_SCRIPT for editing."
     sleep 2
-    vim "$INSTALL_SCRIPT"
+    $EDITOR "$INSTALL_SCRIPT" "$CONTAINERFILE"
 fi
 
