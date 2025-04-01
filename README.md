@@ -30,7 +30,11 @@ usermod --add-subgids ${UID_BASE}-${COUNT} pyxidarius
 loginctl enable-linger pyxidarius
 ```
 
-- Login as the new user, and run
+- Login as the new user (pyxidarius), and run
+```bash
+./containerize.sh mycontainername --build
+```
+
 ```bash
 podman system migrate
 ```
@@ -39,12 +43,13 @@ podman system migrate
     advantages to collecting the container construction into a
     single directory.
 - Place this script in the directory.
-- Run it with an argument that will be the name of the container.
+- Run this script with an argument that will be the name of the container.
 
 ```bash
 ./containerize.sh mycontainername
 ```
-You will have these directories and files, and the editor
+
+You will have these subdirectories and files, and the editor
 will open the `install.sh` file and the `Containerfile` for
 editing.
 
