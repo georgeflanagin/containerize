@@ -1,5 +1,15 @@
 # containerize
-Scripts to assist with common container constructions using podman
+
+Scripts to assist with common application container constructions 
+using podman and apptainer, together. 
+
+**IMPORTANT** The script, `containerize.sh`, can be run multiple times
+to build the container without worrying about overwriting the 
+customizations you have made to the `Containerfile` or the `install.sh`
+files that you have modified.
+
+
+## First steps
 
 - Create, or use an existing non-LDAP user to build containers. If you
     need to create one, do something like this:
@@ -44,5 +54,26 @@ editing.
 │   ├── install.sh*
 │   └── mycontainername/
 ```
+
+## Next steps
+
+- `install.sh` adds files to the container's temporary file system.
+
+- `Containerfile` defines the organization of the container, and the commands
+    to be run at startup.
+
+The following command will attempt to build the container.
+
+```bash
+./containerize.sh mycontainername --build
+```
+
+If you also want a file for apptainer/singularity, you can add one more
+parameter to create `mycontainername.sif`:
+
+```bash
+./containerize.sh mycontainername --build --cluster
+```
+
 
 

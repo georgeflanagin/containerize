@@ -1,15 +1,17 @@
 #!/bin/bash
+echo " "
 echo "VASA FACIT. MUNDI MUTAT"
 echo " "
 set -euo pipefail
 
 if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 <container-name> [--build]"
+    echo "Usage: $0 <container-name> [--build] [--cluster]"
     exit 1
 fi
 
 APP_NAME="$1"
 BUILD_FLAG="${2:-}"
+CLUSTER="${3:-}"
 
 BUILD_DIR="build-$APP_NAME"
 CONTAINERFILE="$BUILD_DIR/Containerfile"
@@ -19,7 +21,7 @@ INSTALL_SCRIPT="$BUILD_DIR/install.sh"
 mkdir -p "$BUILD_DIR"
 mkdir -p "$BUILD_DIR/$APP_NAME"
 
-# Create a base Containerfile if it doesn't exist
+# Create a base Containerfile if we don't yet have one.
 if [[ ! -f "$CONTAINERFILE" ]]; then
     cat > "$CONTAINERFILE" <<EOF
 
@@ -38,7 +40,8 @@ EOF
     echo "Created base Containerfile at $CONTAINERFILE"
 fi
 
-# Create a stub install script if it doesn't exist
+# Create an install script ONLY if it doesn't exist. We don't
+# want to wipe out work we have done.
 if [[ ! -f "$INSTALL_SCRIPT" ]]; then
     cat > "$INSTALL_SCRIPT" <<'EOF'
 #!/bin/bash
@@ -90,5 +93,17 @@ else
     echo "Loading $INSTALL_SCRIPT for editing."
     sleep 2
     $EDITOR "$INSTALL_SCRIPT" "$CONTAINERFILE"
+    exit
 fi
 
+if [[ "$CLUSTER" == "--cluster" ]]; then
+    podman save -o "$APP_NAME.tar" "$APP_NAME"
+    if [ ! $? ]; then
+        echo "Failed to export container to tarball"
+        exit
+    fi
+    sudo apptainer build "$APP_NAME.sif" "docker-archive://$APP_NAME.tar"
+    if [ ! $? ]; then
+        echo "Failed to build $APP_NAME.sif"
+        exit
+    fi
