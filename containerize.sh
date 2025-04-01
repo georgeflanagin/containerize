@@ -20,12 +20,18 @@ mkdir -p "$BUILD_DIR/$APP_NAME"
 # Create a base Containerfile if it doesn't exist
 if [[ ! -f "$CONTAINERFILE" ]]; then
     cat > "$CONTAINERFILE" <<EOF
+
+
 FROM rockylinux:9
 
 COPY install.sh /tmp/install.sh
+COPY PLACEHOLDER/ /tmp/PLACEHOLDER/
 RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm -f /tmp/install.sh
 
-CMD ["/bin/bash"]
+WORKDIR /opt/PLACEHOLDER
+CMD ["--help"]
+ENTRYPOINT ["PLACEHOLDER"]
+
 EOF
     echo "Created base Containerfile at $CONTAINERFILE"
 fi
@@ -69,6 +75,7 @@ echo "$MYAPP installed."
 
 EOF
     sed -i "s/PLACEHOLDER/$APP_NAME/g" "$INSTALL_SCRIPT"
+    sed -i "s/PLACEHOLDER/$APP_NAME/g" "$CONTAINERFILE"
     chmod +x "$INSTALL_SCRIPT"
     echo "Created stub install.sh at $INSTALL_SCRIPT"
 fi
