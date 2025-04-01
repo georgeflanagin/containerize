@@ -92,7 +92,7 @@ if [[ "$BUILD_FLAG" == "--build" ]]; then
 else
     echo "Loading $INSTALL_SCRIPT for editing."
     sleep 2
-    $EDITOR "$INSTALL_SCRIPT" "$CONTAINERFILE"
+    "$EDITOR" "$INSTALL_SCRIPT" "$CONTAINERFILE"
     exit
 fi
 
