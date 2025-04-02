@@ -70,9 +70,6 @@ mkdir -p /opt/$MYAPP
 # Build the application with make, or otherwise collect
 # the files for the application
 
-cd /opt/$MYAPP
-
-
 # Clean up if needed
 dnf clean all
 
