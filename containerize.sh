@@ -104,3 +104,4 @@ if [[ "$CLUSTER" == "--cluster" ]]; then
         echo "Failed to build $APP_NAME.sif"
         exit
     fi
+fi
