@@ -1,0 +1,19 @@
+
+
+FROM rockylinux:8
+
+COPY install.sh /tmp/install.sh
+COPY columbus722/ /tmp/columbus722/
+RUN chmod +x /tmp/install.sh 
+RUN /tmp/install.sh
+
+RUN ln /usr/lib64/libncursesw.so.6 /usr/lib64/libncursesw.so.5
+RUN ln /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so.5
+
+ENV LD_LIBRARY_PATH="/usr/lib64/openmpi/lib:/usr/lib64/mpich/lib:/usr/lib64/mvapich2/lib/:$LD_LIBRARY_PATH"
+
+ENV COLUMBUS=/opt/columbus722
+
+WORKDIR /opt/columbus722
+ENTRYPOINT ["/bin/bash"]
+
